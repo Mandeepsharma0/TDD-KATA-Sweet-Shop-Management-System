@@ -1,12 +1,24 @@
-import express from 'express';
+import express from "express";
+import authRoutes from "./routes/auth.routes.js"; 
+import authMiddleware from "./middleware/auth.middleware.js";
 
 const app = express();
-const PORT = 3000;
 
-app.get('/', (req, res) => {
-  res.send('Sweet Shop Backend is running!');
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("Sweet Shop Backend is running!");
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+
+app.use("/api/auth", authRoutes);
+
+app.get("/protected", authMiddleware, (req, res) => {
+  res.json({
+    message: "You are authorized",
+    user: req.user
+  });
 });
+
+export default app;
+
