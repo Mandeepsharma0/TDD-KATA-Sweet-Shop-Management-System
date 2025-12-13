@@ -1,6 +1,7 @@
 import express from "express";
 import authRoutes from "./routes/auth.routes.js"; 
 import authMiddleware from "./middleware/auth.middleware.js";
+import sweetRoutes from "./routes/sweet.routes.js";
 
 const app = express();
 
@@ -12,6 +13,8 @@ app.get("/", (req, res) => {
 
 
 app.use("/api/auth", authRoutes);
+
+app.use("/api/sweets", sweetRoutes);
 
 app.get("/protected", authMiddleware, (req, res) => {
   res.json({
