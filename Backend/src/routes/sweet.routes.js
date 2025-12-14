@@ -1,35 +1,28 @@
 import express from "express";
+import authMiddleware from "../middleware/auth.middleware.js";
 import {
   addSweet,
   getAllSweets,
-  searchSweets,
+  buySweet,
   updateSweet,
-  deleteSweet,
-  purchaseSweet,
-  restockSweet
+  deleteSweet
 } from "../controllers/sweet.controller.js";
+
+const router = express.Router();
 
 const adminCheck = (req, res, next) => {
   if (req.user.role !== "admin") {
-    return res.status(403).json({
-      message: "Admin access only"
-    });
+    return res.status(403).json({ message: "Admin only" });
   }
   next();
 };
 
-
-import authMiddleware from "../middleware/auth.middleware.js";
-
-const router = express.Router();
-
 router.get("/", authMiddleware, getAllSweets);
-router.get("/search", authMiddleware, searchSweets);
-router.post("/:id/purchase", authMiddleware, purchaseSweet);
+router.post("/:id/buy", authMiddleware, buySweet);
+
 router.post("/", authMiddleware, adminCheck, addSweet);
 router.put("/:id", authMiddleware, adminCheck, updateSweet);
 router.delete("/:id", authMiddleware, adminCheck, deleteSweet);
-router.post("/:id/restock", authMiddleware, adminCheck, restockSweet);
-
 
 export default router;
+
